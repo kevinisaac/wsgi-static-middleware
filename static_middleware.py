@@ -30,12 +30,7 @@ class StaticMiddleware(object):
             )
 
             if not path.startswith(static_path) or not os.path.exists(path):
-                start_response("404 not found", [('Content-type', 'text/plain')])
-                return [
-                    'File Not Found: %s\n' % environ['PATH_INFO'],
-                    'STATIC_PATH: %s\n' % static_path,
-                    'Joined path: %s' % path
-                ]
+                return self.app(environ, start_response)
             else:
                 filetype = mimetypes.guess_type(path, strict=True)[0]
                 if not filetype:
